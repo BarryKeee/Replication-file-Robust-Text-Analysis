@@ -60,10 +60,3 @@ def generate_raw_data():
     
     return document, date
 
-
-
-"""
-
-TODO: generate new separation ruls
-
-"""

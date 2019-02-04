@@ -12,6 +12,13 @@ from gensim import corpora
 
 def generate_term_document():
     
+    
+    '''
+    This function generates the term-document matrix from data in raw_token.xlsx
+    
+    It returns the pandas dataframe of the term-document matrix. It also saves it to term_document.xlsx
+    
+    '''
     data = pd.read_excel('raw_token.xlsx')
         
     document_content = []
@@ -36,5 +43,7 @@ def generate_term_document():
         
         
     term_document = term_document.fillna(0)
-    
+    term_document = term_document.transpose()
+    term_document = term_document / term_document.sum(axis = 0)
+    term_document.to_excel('term_document.xlsx')
     return term_document

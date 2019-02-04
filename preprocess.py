@@ -14,6 +14,21 @@ from nltk.stem import PorterStemmer
 
 def preprocess():
     
+    
+    '''
+    main function for preprocessing
+    
+    need separation rule of FOMC1 and FOMC2 from separation.xlsx
+    
+    This function writes the tokenized documents in raw_token.xlsx, which includes columns of 
+    
+    Date: date of the meeting
+    Section: FOMC1 or FOMC2
+    Speaker: speaker of the interjection
+    content: list of tokens in the interjection
+    
+    '''
+    
     separation = pd.read_excel('separation.xlsx')
     
     text = pd.read_excel('raw_text.xlsx')
@@ -33,13 +48,28 @@ def preprocess():
     FOMC1_token = tokenize(FOMC1_content)
     FOMC2_token = tokenize(FOMC2_content)
     final = final_merge(FOMC1_token, FOMC1_speaker, FOMC2_token, FOMC2_speaker, date)
-    final['Speaker'] = text['Speaker'].values
     final.to_excel('raw_token.xlsx')    
         
 
         
 def separation_func(document, speaker, separation):
     
+    '''
+    separate documents based on FOMC1 and FOMC2 separation
+    
+    input: 
+    document (list of words): list of 150 meetings, each meeting is a list of all interjections
+    speaker: list of 150 meetings, each meeting is a list of all speakers in the meeting
+    separation: separation rule of the documents
+    
+    return: 
+    
+    FOMC1: list of 150 FOMC1 sections
+    FOMC2: list of 150 FOMC2 sections
+    FOMC1_speaker: list of the corresponding speakers of FOMC1 sections
+    FOMC2_speaker: list of corresponding speakers of FOMC2 sections
+    
+    '''
     FOMC1 = []
     FOMC2 = []
     FOMC1_speaker = []
@@ -57,26 +87,19 @@ def separation_func(document, speaker, separation):
 
     return FOMC1, FOMC2, FOMC1_speaker, FOMC2_speaker        
 
-            
-def separate_speaker(FOMC_meeting):
-    
-    
-    speaker = []
-    content = []
-    for meeting in FOMC_meeting:
-        speaker_meeting = []
-        content_meeting = []
-        for statement in meeting:
-            speaker_meeting.append(statement.split('.')[0])
-            content_meeting.append(' '.join(statement.split('.')[1:]))
-        speaker.append(speaker_meeting)
-        content.append(content_meeting)
-            
-        
-    return speaker, content
-    
 def tokenize(content):
     
+    '''
+    tokenize the content. 
+    1. remove all words with length of 1
+    2. remove all non-alphabetical words
+    3. remove all stop-words
+    4. stem all the remaining words
+    
+    input: content: list of list of words
+    
+    return: the corresponding tokenized lists
+    '''
     FOMC_token = []
     for meeting in content:
         meeting_token = []
@@ -95,6 +118,22 @@ def tokenize(content):
 
 def final_merge(FOMC1_token, speaker_FOMC1, FOMC2_token, speaker_FOMC2, date):
     
+    '''
+    
+    merge all results in one dataframe
+    
+    input: 
+        FOMC2_token: tokenized FOMC1 data
+        FOMC2_token: tokenized FOMC2 data
+        speaker_FOMC1: speakers in each FOMC1 sections
+        speaker_FOMC2: speaker in each FOMC2 sections
+        date: list of dates of meetings
+        
+    output: 
+        dataframe containing the meeting date, section of the interjection, speaker of the interjection, and the tokenized
+        interjection content. 
+        
+    '''
     df_all = pd.DataFrame(columns = ['Meeting','Section','Speaker','Content'])
     for i in np.arange(len(FOMC1_token)):
         df1 = pd.DataFrame(columns = ['Meeting','Section','Speaker','Content'])
