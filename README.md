@@ -4,6 +4,8 @@ This cite contains preprocessing packages for replication of "A Robust Machine L
 
 Required python packages: pandas, numpy, topicmodels, nltk, tika
 
+Coded in Python 3.
+
 To generate term-document matrix from FOMC transcript PDFs, simply run run.py.
 
 Output files: 

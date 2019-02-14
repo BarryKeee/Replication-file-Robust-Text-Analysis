@@ -10,8 +10,13 @@ import pandas as pd
 from gensim import corpora
 
 
+'''
+TODO: make sure runnable for any system
+delete unncessary loops in generate_raw_data
+
+'''
+
 def generate_term_document():
-    
     
     '''
     This function generates the term-document matrix from data in raw_token.xlsx
