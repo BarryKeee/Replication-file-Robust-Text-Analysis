@@ -34,29 +34,25 @@ def generate_raw_data():
     
     start = timeit.default_timer()
     
-    document = []
     raw_text = pd.DataFrame(columns = ['Date','Speaker', 'content'])
 
     for i,file in enumerate(filelist):
         parsed = parser.from_file(os.path.join(cwd, 'FOMC_pdf',file))
         interjections = re.split('MR. |MS. |CHAIRMAN |VICE CHAIRMAN ', parsed['content'])[1:]
         temp_df = pd.DataFrame(columns = ['Date','Speaker','content'])
-        interjection_new = []
-        for interjection in interjections:
-            
-            temp_temp_df = pd.DataFrame(columns = ['Date','Speaker','content'], index = [0])
-            interjection = interjection.replace('\n',' ')
-            temp_temp_df['Speaker'] = interjection.split('.')[0]
-            temp_temp_df['content'] = '.'.join(interjection.split('.')[1:])
-            temp_df = pd.concat([temp_df, temp_temp_df], ignore_index = True)
-            interjection_new.append(interjection)
+        
+        interjections = [interjection.replace('\n',' ') for interjection in interjections]
+        
+        temp_df['Speaker'] = [interjection.split('.')[0] for interjection in interjections]
+        
+        temp_df['content'] = ['.'.join(interjection.split('.')[1:]) for interjection in interjections]
+
         temp_df['Date'] = date[i]
-        document.append(interjection_new)
         raw_text = pd.concat([raw_text, temp_df], ignore_index = True)
     end = timeit.default_timer()
     raw_text.index = raw_text['Date']
     raw_text.to_excel('raw_text.xlsx')
     print("Documents processed. Time: {}".format(end - start))
     
-    return document, date
+    return raw_text
 
