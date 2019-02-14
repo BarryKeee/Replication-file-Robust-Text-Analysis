@@ -38,7 +38,7 @@ def generate_raw_data():
 
     for i,file in enumerate(filelist):
         parsed = parser.from_file(os.path.join(cwd, 'FOMC_pdf',file))
-        interjections = re.split('MR. |MS. |CHAIRMAN |VICE CHAIRMAN ', parsed['content'])[1:]
+        interjections = re.split('\nMR. |\nMS. |\nCHAIRMAN |\nVICE CHAIRMAN ', parsed['content'])[1:]
         temp_df = pd.DataFrame(columns = ['Date','Speaker','content'])
         
         interjections = [interjection.replace('\n',' ') for interjection in interjections]

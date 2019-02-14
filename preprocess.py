@@ -32,6 +32,7 @@ def preprocess():
     separation = pd.read_excel('separation.xlsx')
     
     text = pd.read_excel('raw_text.xlsx')
+    text = text.fillna('0')
     date = text['Date'].unique()
     speaker = []
     document = []
@@ -41,14 +42,16 @@ def preprocess():
         document.append(meeting_text)
         speaker.append(speaker_list)
     
+    text['content'] = tokenize(text['content'].values)
+    text.to_excel('FOMC_token_all.xlsx')
     
     FOMC1_content, FOMC2_content, FOMC1_speaker, FOMC2_speaker = separation_func(document, speaker, separation)
 #    FOMC1_speaker, FOMC1_content = separate_speaker(FOMC1)
 #    FOMC2_speaker, FOMC2_content = separate_speaker(FOMC2)
-    FOMC1_token = tokenize(FOMC1_content)
-    FOMC2_token = tokenize(FOMC2_content)
+    FOMC1_token = tokenize_doc(FOMC1_content)
+    FOMC2_token = tokenize_doc(FOMC2_content)
     final = final_merge(FOMC1_token, FOMC1_speaker, FOMC2_token, FOMC2_speaker, date)
-    final.to_excel('raw_token.xlsx')    
+    final.to_excel('FOMC_token_separated.xlsx')    
         
 
         
@@ -87,7 +90,7 @@ def separation_func(document, speaker, separation):
 
     return FOMC1, FOMC2, FOMC1_speaker, FOMC2_speaker        
 
-def tokenize(content):
+def tokenize_doc(content):
     
     '''
     tokenize the content. 
@@ -151,3 +154,17 @@ def final_merge(FOMC1_token, speaker_FOMC1, FOMC2_token, speaker_FOMC2, date):
         
     return df_all
     
+
+def tokenize(content):
+    
+    FOMC_token = []
+    for statement in content:
+        docsobj = topicmodels.RawDocs([statement], "long")
+        docsobj.token_clean(1)
+        docsobj.stopword_remove("tokens")
+        docsobj.stem()
+        docsobj.stopword_remove("stems")
+        ps = PorterStemmer()
+        FOMC_token.append(' '.join([ps.stem(word) for word in docsobj.tokens[0]]))
+        
+    return FOMC_token
