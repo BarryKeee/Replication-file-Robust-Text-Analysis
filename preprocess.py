@@ -80,11 +80,11 @@ def separation_func(document, speaker, separation):
     
     for (i,meeting) in enumerate(document):
         try:
-            FOMC1.append(meeting[int(separation['FOMC1'][i]):int(separation['FOMC2'][i])])
-            FOMC2.append(meeting[int(separation['FOMC2'][i]):])
+            FOMC1.append(meeting[int(separation['FOMC1_start'][i]):int(separation['FOMC1_end'][i])])
+            FOMC2.append(meeting[(len(meeting) - int(separation['FOMC2_start_from_end'][i])):])
             
-            FOMC1_speaker.append(speaker[i][int(separation['FOMC1'][i]):int(separation['FOMC2'][i])])
-            FOMC2_speaker.append(speaker[i][int(separation['FOMC2'][i]):])
+            FOMC1_speaker.append(speaker[i][int(separation['FOMC1_start'][i]):int(separation['FOMC1_end'][i])])
+            FOMC2_speaker.append(speaker[i][(len(meeting) - int(separation['FOMC2_start_from_end'][i])):])
         except TypeError:
             pass
 
@@ -139,6 +139,8 @@ def final_merge(FOMC1_token, speaker_FOMC1, FOMC2_token, speaker_FOMC2, date):
     '''
     df_all = pd.DataFrame(columns = ['Meeting','Section','Speaker','Content'])
     for i in np.arange(len(FOMC1_token)):
+        if len(FOMC1_token[i]) == 0:
+            pass
         df1 = pd.DataFrame(columns = ['Meeting','Section','Speaker','Content'])
         df1['Speaker'] = speaker_FOMC1[i]
         df1['Content'] = FOMC1_token[i]

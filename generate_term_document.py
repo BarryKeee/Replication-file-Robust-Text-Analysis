@@ -24,7 +24,7 @@ def generate_term_document():
     It returns the pandas dataframe of the term-document matrix. It also saves it to term_document.xlsx
     
     '''
-    data = pd.read_excel('raw_token.xlsx')
+    data = pd.read_excel('FOMC_token_separated.xlsx')
         
     document_content = []
     for statement in data['Content'].values:
