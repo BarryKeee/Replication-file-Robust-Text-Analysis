@@ -11,6 +11,10 @@ import timeit
 import os
 import pandas as pd
 
+# TODO: clean up words with rank of TFIDF less than 9000
+# TODO: lowercase everything
+# TODO: write NNMF algorithm in numba or sython?
+
 
 
 def read_raw_data():
