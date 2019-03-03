@@ -44,6 +44,7 @@ def tokenize(content):
     '''
     FOMC_token = []
     for statement in content:
+        statement = statement.lower()
         docsobj = topicmodels.RawDocs([statement], "long")
         docsobj.token_clean(1)
         docsobj.stopword_remove("tokens")
