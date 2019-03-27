@@ -19,5 +19,3 @@ term_document.xlsx: generate term-document matrix from tokenized documents.
 Each document contains the speaker in each meeting, meeting date, meeting section (FOMC1/FOMC2 based on separation rules).
 
 **Note: run.py will probably take 20-30 minutes to run in order to process the all documents**
-
-Todo: add NNMF algorithm and full replication in Python
