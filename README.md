@@ -19,3 +19,8 @@ term_document.xlsx: generate term-document matrix from tokenized documents.
 Each document contains the speaker in each meeting, meeting date, meeting section (FOMC1/FOMC2 based on separation rules).
 
 **Note: run.py will probably take 20-30 minutes to run in order to process the all documents**
+
+
+Todo: 1. clean up repo
+2. check colocation (double words, P818 HMP)
+3. implement in Numba
