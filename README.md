@@ -24,3 +24,8 @@ Each document contains the speaker in each meeting, meeting date, meeting sectio
 Todo: 1. clean up repo
 2. check colocation (double words, P818 HMP)
 3. implement in Numba
+
+
+4/5 todo:
+1. finish collocation
+2. find package to do NNMF
